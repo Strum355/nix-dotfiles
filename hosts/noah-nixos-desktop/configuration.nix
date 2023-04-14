@@ -1,6 +1,10 @@
 { config, pkgs, ... }:
-
-{
+let 
+  lockBackground = builtins.path {
+    path = ./lock-background.jpg;
+    name = "slick-lock-background";
+  };
+in {
   imports = [
     ./hardware-configuration.nix
   ];
@@ -85,6 +89,12 @@
       greeter.enable = true;
       greeters.slick = {
         enable = true;
+        draw-user-backgrounds = false;
+        extraConfig = ''
+        [Greeter]
+        background=${lockBackground}
+        stretch-background-across-monitors=false
+        '';
       };
     };
     dpi = 109;
@@ -195,6 +205,7 @@
     font-manager
     vlc
     nitrogen
+    xclip
   ];
 
   programs = {
