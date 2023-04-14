@@ -1,10 +1,11 @@
 { config, pkgs, ... }:
-let 
+let
   lockBackground = builtins.path {
     path = ./lock-background.jpg;
     name = "slick-lock-background";
   };
-in {
+in
+{
   imports = [
     ./hardware-configuration.nix
   ];
@@ -43,31 +44,38 @@ in {
   #  useXkbConfig = true; # use xkbOptions in tty.
   #};
 
-  fonts.fonts = with pkgs; [
-    noto-fonts
-    noto-fonts-cjk
-    noto-fonts-emoji
-    joypixels
-    dejavu_fonts
-    fira-code
-    font-awesome
-    font-awesome_5
-    (pkgs.stdenv.mkDerivation {
-      src = pkgs.fetchurl {
-        name = "MonoStroom-Regular-v2.0-pre.ttf";
-        url = "https://github.com/Strum355/MonoStroom/releases/download/v2.0-pre/MonoStroom-Regular-2.0-pre.ttf";
-        sha256 = "sha256-s9BEtT45g+lPJZY1494m51SqFB5KXy1OKVMirwZcuyM=";
+  fonts = {
+    fonts = with pkgs; [
+      noto-fonts
+      noto-fonts-cjk
+      noto-fonts-emoji
+      noto-fonts-emoji-blob-bin
+      joypixels
+      dejavu_fonts
+      fira-code
+      font-awesome
+      font-awesome_5
+      monostroom
+      code2000
+    ];
+    fontconfig = {
+      enable = true;
+      hinting = {
+        enable = true;
+        autohint = false;
+        style = "hintslight";
       };
-
-      pname = "MonoStroom";
-      version = "2.0-pre";
-      dontUnpack = true;
-      sourceRoot = ".";
-      installPhase = ''
-        install -D $src -t $out/share/fonts/truetype/
-      '';
-    })
-  ];
+      subpixel = {
+        rgba = "rgb";
+        lcdfilter = "default";
+      };
+      defaultFonts = let fonts = import ./fonts.nix; in
+        {
+          monospace = fonts.monospace;
+          sansSerif = fonts.sansSerif;
+        };
+    };
+  };
 
   services.zfs.autoSnapshot.enable = true;
   services.zfs.autoScrub.enable = true;
@@ -91,13 +99,13 @@ in {
         enable = true;
         draw-user-backgrounds = false;
         extraConfig = ''
-        [Greeter]
-        background=${lockBackground}
-        stretch-background-across-monitors=false
+          [Greeter]
+          background=${lockBackground}
+          stretch-background-across-monitors=false
         '';
       };
     };
-    dpi = 109;
+    dpi = 96;
     videoDrivers = [ "nvidia" ];
     screenSection = ''
       Option "metamodes" "DP-4.8: 2560x1440_60 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}, HDMI-0: 1920x1080_60 +2560+360"
@@ -129,6 +137,13 @@ in {
     hashedPassword = "$y$jFT$4BKFwYX3OJFl9W6Md0cw./$fS16Nf1gFV3PecFbe5LfzCulv4OoLJFKz8nEfXi.pz0";
   };
 
+  environment.sessionVariables = with pkgs; {
+    JAVA_8_HOME = "${jdk8}";
+    JAVA_11_HOME = "${jdk11}";
+    JAVA_17_HOME = "${jdk17}";
+    JAVA_19_HOME = "${jdk19}";
+  };
+
   environment.pathsToLink = [ "/libexec" ];
   environment.systemPackages = with pkgs; [
     vim
@@ -156,6 +171,7 @@ in {
     jdk8
     jdk11
     jdk17
+    jdk19
     kotlin
     go_1_19
     python311
@@ -194,6 +210,7 @@ in {
     flameshot
     gnome.zenity
     gnome.gnome-keyring
+    gnome.file-roller
     playerctl
     fzf
     fishPlugins.foreign-env
@@ -206,6 +223,8 @@ in {
     vlc
     nitrogen
     xclip
+    unzip
+    file
   ];
 
   programs = {
@@ -224,6 +243,8 @@ in {
   # networking.firewall.allowedTCPPorts = [ ... ];
   # networking.firewall.allowedUDPPorts = [ ... ];
   networking.firewall.enable = false;
+  networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
+  networking.networkmanager.insertNameservers = [ "1.1.1.1" "8.8.8.8" ];
 
   virtualisation.docker = {
     rootless.enable = true;
