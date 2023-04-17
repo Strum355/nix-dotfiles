@@ -18,15 +18,19 @@ in
   boot.kernel.sysctl."net.ipv4.conf.all.arp_announce" = 1;
 
   networking = {
+    firewall.enable = false;
+    nameservers = [ "1.1.1.1" "8.8.8.8" ];
     hostName = "noah-nixos-desktop";
     hostId = "8425e349";
     networkmanager = {
       enable = true;
+      dns = "none";
+      # insertNameservers = [ "1.1.1.1" "8.8.8.8" ];
       # doesn't solve the problem, resvisit
       extraConfig = ''
-        [connection-wifi-wlp5s0]
-        match-device=interface-name:wlp5s0
-        ipv4.route-metric=100
+        [connection-wifi-wlp6s0]
+        match-device=interface-name:wlp6s0
+        ipv4.route-metric=10
 
         [connection-eth-eno1]
         match-device=interface-name:eno1
@@ -130,7 +134,7 @@ in
   users.mutableUsers = false;
   users.users.noah = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" "audio" ];
     shell = pkgs.fish;
     home = "/home/noah";
     createHome = true;
@@ -142,6 +146,7 @@ in
     JAVA_11_HOME = "${jdk11}";
     JAVA_17_HOME = "${jdk17}";
     JAVA_19_HOME = "${jdk19}";
+    _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
   };
 
   environment.pathsToLink = [ "/libexec" ];
@@ -239,12 +244,6 @@ in
   services.gnome.gnome-keyring.enable = true;
   #services.passSecretService.enable = true;
   # services.openssh.enable = true;
-
-  # networking.firewall.allowedTCPPorts = [ ... ];
-  # networking.firewall.allowedUDPPorts = [ ... ];
-  networking.firewall.enable = false;
-  networking.nameservers = [ "1.1.1.1" "8.8.8.8" ];
-  networking.networkmanager.insertNameservers = [ "1.1.1.1" "8.8.8.8" ];
 
   virtualisation.docker = {
     rootless.enable = true;
