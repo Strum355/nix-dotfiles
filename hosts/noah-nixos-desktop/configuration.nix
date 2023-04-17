@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 let
   lockBackground = builtins.path {
     path = ./lock-background.jpg;
@@ -25,8 +25,6 @@ in
     networkmanager = {
       enable = true;
       dns = "none";
-      # insertNameservers = [ "1.1.1.1" "8.8.8.8" ];
-      # doesn't solve the problem, resvisit
       extraConfig = ''
         [connection-wifi-wlp6s0]
         match-device=interface-name:wlp6s0
@@ -84,6 +82,16 @@ in
   services.zfs.autoSnapshot.enable = true;
   services.zfs.autoScrub.enable = true;
 
+  location = {
+    latitude = 52.3379105;
+    longitude = -6.4560767;
+  };
+ 
+  services.geoclue2.enable = true;
+  services.redshift = {
+    enable = true;
+    temperature.night = 4500; 
+  };
   services.xserver = {
     enable = true;
     exportConfiguration = true;
@@ -230,6 +238,8 @@ in
     xclip
     unzip
     file
+    gcc
+    telegram-desktop
   ];
 
   programs = {
@@ -259,4 +269,9 @@ in
   };
 
   system.stateVersion = "22.11";
+  system.activationScripts.ldso = lib.stringAfter [ "usrbinenv" ] ''
+    mkdir -m 0755 -p /lib64
+    ln -sfn ${pkgs.glibc.out}/lib64/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2.tmp
+    mv -f /lib64/ld-linux-x86-64.so.2.tmp /lib64/ld-linux-x86-64.so.2 # atomically replace
+  '';
 }
