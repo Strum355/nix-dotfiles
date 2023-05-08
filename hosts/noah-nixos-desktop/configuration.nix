@@ -35,6 +35,9 @@ in
         ipv4.route-metric=100
       '';
     };
+    extraHosts = ''
+      127.0.0.1 sourcegraph.test
+    '';
   };
 
   time.timeZone = "Europe/Dublin";
