@@ -239,16 +239,20 @@ in
     telegram-desktop
   ];
 
+  security.pam.services.lightdm.enableGnomeKeyring = true;
+  services.gnome.gnome-keyring.enable = true;
+  
   programs = {
     gnupg.agent = {
       enable = true;
     };
+    # nix-ld.enable = true;
+    # ssh.startAgent = true;
     fish.enable = true;
     browserpass.enable = true;
     dconf.enable = true;
   };
 
-  services.gnome.gnome-keyring.enable = true;
   #services.passSecretService.enable = true;
   # services.openssh.enable = true;
 
