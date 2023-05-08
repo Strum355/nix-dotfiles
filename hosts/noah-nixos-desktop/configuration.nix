@@ -92,6 +92,7 @@ in
   services.xserver = {
     enable = true;
     exportConfiguration = true;
+    
     windowManager.i3 = {
       enable = true;
       extraPackages = with pkgs; [
@@ -99,7 +100,12 @@ in
         rofi
         polybar
       ];
+      extraSessionCommands = ''
+        eval $(${pkgs.gnome3.gnome-keyring}/bin/gnome-keyring-daemon --daemonize --components=ssh,secrets)
+        export SSH_AUTH_SOCK
+      '';
     };
+    
     displayManager.defaultSession = "none+i3";
     displayManager.lightdm = {
       enable = true;
@@ -114,6 +120,7 @@ in
         '';
       };
     };
+    
     dpi = 96;
     videoDrivers = [ "nvidia" ];
     screenSection = ''
