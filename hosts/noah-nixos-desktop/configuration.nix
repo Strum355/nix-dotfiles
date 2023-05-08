@@ -131,7 +131,10 @@ in
   #   "caps:escape" # map caps to escape.
   # };
 
-  services.printing.enable = true;
+  services.printing = {
+    enable = true;
+    drivers = with pkgs; [ epson-escpr ];
+  };
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;
