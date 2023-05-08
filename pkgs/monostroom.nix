@@ -1,6 +1,6 @@
-{ stdenv, fetchurl }:
+{ stdenvNoCC, fetchurl }:
 let version = "2.0-pre"; in
-stdenv.mkDerivation {
+stdenvNoCC.mkDerivation {
   src = fetchurl {
     name = "MonoStroom-Regular-${version}.ttf";
     url = "https://github.com/Strum355/MonoStroom/releases/download/v2.0-pre/MonoStroom-Regular-${version}.ttf";

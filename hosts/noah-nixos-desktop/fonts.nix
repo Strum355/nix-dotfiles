@@ -1,4 +1,12 @@
-{
+rec {
+  emoji = [
+    "Blobmoji"
+    "Noto Emoji"
+    "Font Awesome 6 Brands"
+    "Font Awesome 6 Free"
+    "Font Awesome 5 Brands"
+    "Font Awesome 5 Free"
+  ];
   monospace = [
     "MonoStroom for Powerline"
     "DejaVu Sans Mono"
@@ -11,6 +19,7 @@
     "Noto Emoji"
     "Fira Code"
   ];
+  serif = sansSerif;
   sansSerif = [
     "Noto Sans"
     "Noto Color Emoji"

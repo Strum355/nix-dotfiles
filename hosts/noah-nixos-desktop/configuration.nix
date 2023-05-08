@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ... }:
+{ lib, pkgs, ... }:
 let
   lockBackground = builtins.path {
     path = ./lock-background.jpg;
@@ -60,6 +60,7 @@ in
       monostroom
       code2000
     ];
+    fontDir.enable = true;
     fontconfig = {
       enable = true;
       hinting = {
@@ -71,11 +72,7 @@ in
         rgba = "rgb";
         lcdfilter = "default";
       };
-      defaultFonts = let fonts = import ./fonts.nix; in
-        {
-          monospace = fonts.monospace;
-          sansSerif = fonts.sansSerif;
-        };
+      defaultFonts = {inherit (import ./fonts.nix) monospace sansSerif emoji serif; };
     };
   };
 
@@ -210,7 +207,7 @@ in
     }))
     htop
     coursier
-    (adapta-gtk-theme.overrideAttrs (oldAttrs: rec {
+    (adapta-gtk-theme.overrideAttrs (oldAttrs: {
       version = "3.95.0.11-custom";
       src = pkgs.fetchFromGitHub {
         owner = "Strum355";

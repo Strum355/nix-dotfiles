@@ -1,5 +1,5 @@
-{ stdenv, fetchzip }:
-stdenv.mkDerivation {
+{ stdenvNoCC, fetchzip }:
+stdenvNoCC.mkDerivation {
   src = fetchzip {
     extension = "zip";
     stripRoot = false;
