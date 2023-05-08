@@ -152,6 +152,8 @@ in
     JAVA_17_HOME = "${jdk17}";
     JAVA_19_HOME = "${jdk19}";
     _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
+    JAVA_HOME = "${jdk11}"; 
+    RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
   };
 
   environment.pathsToLink = [ "/libexec" "/share/nix-direnv" ];
@@ -184,15 +186,15 @@ in
     jdk19
     kotlin
     go_1_19
+    gopls
     python311
-    bazelisk
-    bazel
+    # bazel
     nodejs-19_x
     maven
     gradle
     synergy
     kitty
-    rnix-lsp
+    nil
     nix-index
     cinnamon.nemo
     cinnamon.mint-themes
@@ -221,6 +223,7 @@ in
     gnome.zenity
     gnome.gnome-keyring
     gnome.file-roller
+    gnome.eog
     playerctl
     fzf
     fishPlugins.foreign-env
@@ -236,7 +239,15 @@ in
     unzip
     file
     gcc
+    clang
     telegram-desktop
+    zoom-us
+    patchelf
+    direnv
+    nix-direnv
+    docker-compose
+    graphviz
+    jq
   ];
 
   security.pam.services.lightdm.enableGnomeKeyring = true;
