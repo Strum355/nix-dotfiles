@@ -263,7 +263,11 @@ in
     (self: super: { nix-direnv = super.nix-direnv.override { enableFlakes = true; }; })
   ];
   nix = {
-    settings.experimental-features = [ "nix-command" "flakes" ];
+    settings = {
+      experimental-features = [ "nix-command" "flakes" ];
+      auto-optimise-store = true;
+      keep-outputs = true;
+    };
     gc.automatic = true;
     optimise.automatic = true;
   };
