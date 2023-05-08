@@ -154,7 +154,7 @@ in
     _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
   };
 
-  environment.pathsToLink = [ "/libexec" ];
+  environment.pathsToLink = [ "/libexec" "/share/nix-direnv" ];
   environment.systemPackages = with pkgs; [
     vim
     git
@@ -259,6 +259,9 @@ in
 
   nixpkgs.config.joypixels.acceptLicense = true;
   nixpkgs.config.allowUnfree = true;
+  nixpkgs.overlays = [
+    (self: super: { nix-direnv = super.nix-direnv.override { enableFlakes = true; }; })
+  ];
   nix = {
     settings.experimental-features = [ "nix-command" "flakes" ];
     gc.automatic = true;
