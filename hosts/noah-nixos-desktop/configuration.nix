@@ -4,11 +4,8 @@ let
     path = ./lock-background.jpg;
     name = "slick-lock-background";
   };
-in
-{
-  imports = [
-    ./hardware-configuration.nix
-  ];
+in {
+  imports = [ ./hardware-configuration.nix ];
 
   boot = {
     loader = {
@@ -32,7 +29,7 @@ in
     hostId = "8425e349";
     networkmanager = {
       enable = true;
-      dns = "none";
+      dns = "systemd-resolved";
       extraConfig = ''
         [connection-wifi-wlp6s0]
         match-device=interface-name:wlp6s0
@@ -46,6 +43,10 @@ in
     extraHosts = ''
       127.0.0.1 sourcegraph.test
     '';
+  };
+  services.resolved = {
+    enable = true;
+    dnssec = "true";
   };
 
   time.timeZone = "Europe/Dublin";
