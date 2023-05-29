@@ -10,12 +10,20 @@ in
     ./hardware-configuration.nix
   ];
 
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.efi.canTouchEfiVariables = true;
-  boot.supportedFilesystems = [ "zfs" "ntfs" ];
+  boot = {
+    loader = {
+      systemd-boot = {
+        enable = true;
+        memtest86.enable = true;
+      };
+      efi.canTouchEfiVariables = true;
+    };
 
-  boot.kernel.sysctl."net.ipv4.conf.all.arp_ignore" = 1;
-  boot.kernel.sysctl."net.ipv4.conf.all.arp_announce" = 1;
+    supportedFilesystems = [ "zfs" "ntfs" ];
+
+    kernel.sysctl."net.ipv4.conf.all.arp_ignore" = 1;
+    kernel.sysctl."net.ipv4.conf.all.arp_announce" = 1;
+  };
 
   networking = {
     firewall.enable = false;
