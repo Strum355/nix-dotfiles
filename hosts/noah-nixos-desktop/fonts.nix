@@ -1,6 +1,10 @@
 rec {
   emoji = [
     "Blobmoji"
+    "Twitter Color Emoji"
+    "JoyPixels"
+    "OpenMoji"
+    "Noto Color Emoji"
     "Noto Emoji"
     "Font Awesome 6 Brands"
     "Font Awesome 6 Free"
@@ -9,20 +13,29 @@ rec {
   ];
   monospace = [
     "MonoStroom for Powerline"
-    "DejaVu Sans Mono"
-    "JoyPixels"
     "Blobmoji"
+    "Twitter Color Emoji"
+    "JoyPixels"
+    "OpenMoji"
+    "Noto Color Emoji"
+    "Noto Emoji"
+    "Inconsolata"
+    "Fira Code"
+    "DejaVu Sans Mono"
     "Font Awesome 6 Brands"
     "Font Awesome 6 Free"
     "Font Awesome 5 Brands"
     "Font Awesome 5 Free"
-    "Noto Emoji"
-    "Fira Code"
   ];
   serif = sansSerif;
   sansSerif = [
     "Noto Sans"
+    "Blobmoji"
+    "Twitter Color Emoji"
+    "JoyPixels"
+    "OpenMoji"
     "Noto Color Emoji"
+    "Noto Emoji"
     "Noto Fangsong KSS Rotated"
     "Noto Fangsong KSS Vertical"
     "Noto Looped Thai"
@@ -242,7 +255,6 @@ rec {
     "Noto Serif Vithkuqi"
     "Noto Serif Yezidi"
     "Noto Traditional Nushu"
-    "Blobmoji"
     "Font Awesome 6 Brands"
     "Font Awesome 6 Free"
     "Font Awesome 5 Brands"
