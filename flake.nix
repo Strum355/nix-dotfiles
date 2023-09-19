@@ -1,11 +1,13 @@
 {
   description = "strum355's nix dotfiles";
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     nix-otel = {
       url = "github:lf-/nix-otel";
       # inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
     };
     home-manager = {
       url = "github:nix-community/home-manager/master";
@@ -13,11 +15,11 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, home-manager, nix-otel }@attrs:
+  outputs = { self, nixpkgs, flake-utils, home-manager, nix-otel }@inputs:
     {
       nixosConfigurations.noah-nixos-desktop = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = attrs;
+        specialArgs = inputs;
         modules = [
           { nixpkgs.overlays = builtins.attrValues self.overlays; }
           { nixpkgs.overlays = [ nix-otel.overlays.default ]; }
