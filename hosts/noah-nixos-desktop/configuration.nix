@@ -359,7 +359,11 @@ in {
   };
 
   # services.passSecretService.enable = true;
-  # services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    allowSFTP = true;
+    banner = import ./ssh-banner.nix;
+  };
 
   virtualisation.docker = {
     rootless.enable = true;
