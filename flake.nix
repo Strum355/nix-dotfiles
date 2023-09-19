@@ -53,6 +53,8 @@
           polybar-zfs = pkgs.callPackage ./pkgs/polybar-zfs.nix { };
           psgrep = pkgs.callPackage ./pkgs/psgrep.nix { };
           splatmoji = pkgs.callPackage ./pkgs/splatmoji.nix { };
+          # causes way too much to be rebuilt
+          # polkit = pkgs.callPackage ./pkgs/polkit.nix { };
         };
       formatter = nixpkgs.legacyPackages.${system}.nixfmt;
     });
