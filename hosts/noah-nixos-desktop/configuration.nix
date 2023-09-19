@@ -358,6 +358,8 @@ in {
     nix-ld.enable = true;
   };
 
+  services.gvfs.enable = true;
+
   # services.passSecretService.enable = true;
   services.openssh = {
     enable = true;
@@ -398,5 +400,15 @@ in {
     nixPath = [ "nixpkgs=${nixpkgs.outPath}" ];
   };
 
+  services.udev.extraRules = ''
+    # Windows Recovery Environment
+    # https://en.wikipedia.org/wiki/GUID_Partition_Table
+    ENV{ID_FS_TYPE}=="ntfs|vfat", ENV{ID_PART_ENTRY_TYPE}=="de94bba4-06d1-4d40-a16a-bfd50179d6ac", ENV{UDISKS_IGNORE}="1"
+  '';
+
   system.stateVersion = "22.11";
+  system.activationScripts.mediaMountPoint = ''
+    mkdir -p /run/media/noah
+    chown noah:users /run/media/noah
+  '';
 }
