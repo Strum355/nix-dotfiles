@@ -21,6 +21,7 @@ in {
     kernel.sysctl."net.ipv4.conf.all.arp_ignore" = 1;
     kernel.sysctl."net.ipv4.conf.all.arp_announce" = 1;
     kernelParams = [ "zfs.zfs_arc_max=4294967296" ];
+    swraid.enable = false;
   };
 
   networking = {
@@ -35,6 +36,8 @@ in {
         [connection-wifi-wlp6s0]
         match-device=interface-name:wlp6s0
         ipv4.route-metric=10
+        # not working...
+        # ipv6.addr-gen-mode=eui64
 
         [connection-eth-eno1]
         match-device=interface-name:eno1
@@ -67,7 +70,7 @@ in {
   };
 
   fonts = {
-    fonts = with pkgs; [
+    packages = with pkgs; [
       noto-fonts
       noto-fonts-cjk
       noto-fonts-emoji
@@ -212,6 +215,7 @@ in {
     JAVA_19_HOME = "${jdk19}/lib/openjdk";
     _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
     RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
+    DIRENV_WARN_TIMEOUT = "5m";
   };
 
   environment.pathsToLink = [ "/libexec" "/share/nix-direnv" ];
@@ -323,7 +327,8 @@ in {
     ffmpeg
     wirelesstools
     postgresql
-    (tree-sitter.override { webUISupport = true; })
+    tree-sitter
+    transmission-qt
   ];
 
   security = {
