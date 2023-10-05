@@ -13,16 +13,23 @@
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nix-ld-rs = {
+      url = "github:nix-community/nix-ld-rs";
+      inputs = {
+        nixpkgs.follows = "nixpkgs";
+        flake-utils.follows = "flake-utils";
+      };
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils, home-manager, nix-otel }@inputs:
+  outputs = { self, nixpkgs, flake-utils, home-manager, nix-otel, nix-ld-rs }@inputs:
     {
       nixosConfigurations.noah-nixos-desktop = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [
           { nixpkgs.overlays = builtins.attrValues self.overlays; }
-          { nixpkgs.overlays = [ nix-otel.overlays.default ]; }
+          { nixpkgs.overlays = [ nix-otel.overlays.default nix-ld-rs.overlays.default ]; }
           ./hosts/noah-nixos-desktop/configuration.nix
           home-manager.nixosModules.home-manager
           {

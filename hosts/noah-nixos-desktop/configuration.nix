@@ -360,7 +360,10 @@ in {
     command-not-found.enable = false;
     evince.enable = true;
     nix-index.enable = true;
-    nix-ld.enable = true;
+    nix-ld = {
+      enable = true;
+      package = pkgs.nix-ld-rs;
+    };
   };
 
   services.gvfs.enable = true;
