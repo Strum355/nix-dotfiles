@@ -57,7 +57,13 @@ in {
   };
   services.resolved = {
     enable = true;
+    # epic gaming 
+    # https://sourcegraph.com/github.com/NixOS/nixpkgs@a61c6b478d80952fad5be7fc499f0b9b681c9b58/-/blob/nixos/modules/system/boot/resolved.nix?L89-93
     dnssec = "true";
+    extraConfig = ''
+      DNSOverTLS=yes
+      Cache=yes
+    '';
   };
 
   time.timeZone = "Europe/Dublin";
@@ -253,16 +259,7 @@ in {
     nil
     cinnamon.nemo
     cinnamon.mint-themes
-    (cinnamon.mint-y-icons.overrideAttrs (oldAttrs: {
-      pname = "mint-l-icons";
-      src = pkgs.fetchFromGitHub {
-        owner = "linuxmint";
-        repo = "mint-l-icons";
-        rev = "e9fd3cf2d3f3a22647e9a83da9b16538795fddbb";
-        sha256 = "sha256-RDozoknjXqzjQxLgOAaD/BH7hhi5mNlW+Vne93aEt0I=";
-      };
-    }))
-    htop
+    cinnamon.mint-l-icons
     coursier
     (adapta-gtk-theme.overrideAttrs (oldAttrs: {
       version = "3.95.0.11-custom";
@@ -288,8 +285,8 @@ in {
       src = pkgs.fetchFromGitHub {
         owner = "oh-my-fish";
         repo = "theme-bobthefish";
-        rev = "ed896b65c3ddbdf2929c38719adfb940b0d9b90d";
-        sha256 = "sha256-DRMBZS8nT0rhKXQEGWNqR1FUavtvxH0xUdHU52WhSJQ=";
+        rev = "c2c47dc964a257131b3df2a127c2631b4760f3ec";
+        sha256 = "sha256-LB4g+EA3C7OxTuHfcxfgl8IVBe5NufFc+5z9VcS0Bt0=";
       };
     }))
     wdiff
@@ -334,7 +331,6 @@ in {
   security = {
     polkit.enable = true;
     pam.services.lightdm.enableGnomeKeyring = true;
-
   };
   services.gnome.gnome-keyring.enable = true;
 

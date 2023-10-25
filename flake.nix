@@ -3,6 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     flake-utils.url = "github:numtide/flake-utils";
     nix-otel = {
       url = "github:lf-/nix-otel";
@@ -22,14 +23,21 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, home-manager, nix-otel, nix-ld-rs }@inputs:
-    {
-      nixosConfigurations.noah-nixos-desktop = nixpkgs.lib.nixosSystem {
+  outputs = { self, nixpkgs, flake-utils, home-manager, ... }@inputs:
+   {
+      nixosConfigurations.noah-nixos-desktop = nixpkgs.lib.nixosSystem rec {
         system = "x86_64-linux";
         specialArgs = inputs;
         modules = [
-          { nixpkgs.overlays = builtins.attrValues self.overlays; }
-          { nixpkgs.overlays = [ nix-otel.overlays.default nix-ld-rs.overlays.default ]; }
+          {
+            nixpkgs.overlays = (builtins.attrValues self.overlays) ++ [
+              inputs.nix-otel.overlays.default
+              inputs.nix-ld-rs.overlays.default
+              (final: prev: {
+                fzf = inputs.nixpkgs-small.legacyPackages.${system}.fzf;
+              })
+            ];
+          }
           ./hosts/noah-nixos-desktop/configuration.nix
           home-manager.nixosModules.home-manager
           {
