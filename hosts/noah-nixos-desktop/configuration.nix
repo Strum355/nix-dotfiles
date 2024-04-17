@@ -129,7 +129,6 @@ in {
     longitude = -6.4560767;
   };
 
-  # services.geoclue2.enable = true;
   services.redshift = {
     enable = true;
     temperature.night = 4500;
@@ -163,30 +162,27 @@ in {
     };
 
     dpi = 96;
-    videoDrivers = [ "nvidia" ];
-    screenSection = ''
-      Option "metamodes" "DP-4.8: 2560x1440_60 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}, HDMI-0: 1920x1080_60 +2560+360"
+    videoDrivers = [ "modesetting" ];
+    xrandrHeads = [
+      { output = "DP-4"; primary = true; }
+      { output = "HDMI-1"; }
+    ];
+    deviceSection = ''
+      Option "TearFree" "true"
     '';
   };
+  services.displayManager.defaultSession = "none+i3";
   services.picom.enable = true;
   hardware.opengl = {
     enable = true;
     driSupport = true;
+    driSupport32Bit = true;
     extraPackages = with pkgs; [ 
+      libvdpau
       vaapiVdpau
-      nvidia-vaapi-driver
       libvdpau-va-gl
     ];
   };
-  hardware.nvidia.forceFullCompositionPipeline = true;
-  hardware.nvidia.modesetting.enable = true;
-
-  # Configure keymap in X11
-  # services.xserver.layout = "us";
-  # services.xserver.xkbOptions = {
-  #   "eurosign:e";
-  #   "caps:escape" # map caps to escape.
-  # };
 
   services.fstrim.enable = true;
 
@@ -327,6 +323,8 @@ in {
     postgresql
     tree-sitter
     transmission-qt
+    amdgpu_top
+    radeontop
   ];
 
   security = {
