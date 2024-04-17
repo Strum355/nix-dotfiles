@@ -8,6 +8,10 @@
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
   boot.extraModulePackages = [ ];
+  boot.extraModprobeConfig = ''
+    # https://wiki.gentoo.org/wiki/Iwlwifi/en#.22Microcode_SW_error_detected._Restarting_0x0.22_message_in_kernel_logs
+    options iwlmvm power_scheme=1
+  '';
 
   fileSystems."/" = {
     device = "rpool/nixos";
