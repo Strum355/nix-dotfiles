@@ -346,6 +346,14 @@ in {
 
   services.gvfs.enable = true;
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    xdgOpenUsePortal = true;
+    # do I want kde here?
+    config."none+i3".default = [ "kde" "gtk" "*" ];
+  };
+
   # services.passSecretService.enable = true;
   services.openssh = {
     enable = true;
