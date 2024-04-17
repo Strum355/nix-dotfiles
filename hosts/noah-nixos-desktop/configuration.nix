@@ -224,7 +224,7 @@ in {
     jdk17
     jdk19
     kotlin
-    go_1_19
+    go
     gopls
     python311
     nodejs_20
@@ -239,7 +239,7 @@ in {
     coursier
     (adapta-gtk-theme.overrideAttrs (oldAttrs: {
       version = "3.95.0.11-custom";
-      src = pkgs.fetchFromGitHub {
+      src = fetchFromGitHub {
         owner = "Strum355";
         repo = "adapta-gtk-theme";
         rev = "26dcba1068bd2ce30328df44a911d14471dac030";
@@ -256,15 +256,7 @@ in {
     fzf
     fishPlugins.foreign-env
     fishPlugins.fzf-fish
-    (fishPlugins.bobthefish.overrideAttrs (oldAttrs: {
-      version = "08-05-2023";
-      src = pkgs.fetchFromGitHub {
-        owner = "oh-my-fish";
-        repo = "theme-bobthefish";
-        rev = "c2c47dc964a257131b3df2a127c2631b4760f3ec";
-        sha256 = "sha256-LB4g+EA3C7OxTuHfcxfgl8IVBe5NufFc+5z9VcS0Bt0=";
-      };
-    }))
+    fishPlugins.bobthefish
     wdiff
     diff-so-fancy
     fontconfig
@@ -302,8 +294,26 @@ in {
     postgresql
     tree-sitter
     transmission-qt
+    winbox
+    wireshark
+    nmap
+    ndisc6
+    libreoffice-qt
+    steam
+    dmidecode
+    lm_sensors
+    cargo
+    clippy
+    rustc
+    rustfmt
     amdgpu_top
+    pavucontrol
+    minicom
+    dav1d
     radeontop
+    dive
+    pax-utils
+    nix-inspect
   ];
 
   security = {
@@ -321,19 +331,13 @@ in {
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;
-      pinentryFlavor = "gnome3";
+      pinentryPackage = pkgs.pinentry-gnome3;
     };
-    firefox = {
-      enable = true;
-      nativeMessagingHosts.browserpass = true;
-    };
-    fish.enable = true;
+    firefox.enable = true;
     browserpass.enable = true;
     dconf.enable = true;
     file-roller.enable = true;
-    command-not-found.enable = false;
     evince.enable = true;
-    nix-index.enable = true;
     nix-ld = {
       enable = true;
       package = pkgs.nix-ld-rs;
