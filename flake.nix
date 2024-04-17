@@ -1,6 +1,11 @@
 {
   description = "strum355's nix dotfiles";
 
+  nixConfig = {
+    extra-substituters = [ "https://personal-systems.cachix.org" ];
+    extra-trusted-public-keys = [ "personal-systems.cachix.org-1:yhmUti+2iOTrBWtmZGA71zaPbdQM7iE1k7X9VALPzXM=" ];
+  };
+
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
@@ -23,54 +28,36 @@
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, home-manager, ... }@inputs:
-   {
-      nixosConfigurations.noah-nixos-desktop = nixpkgs.lib.nixosSystem rec {
-        system = "x86_64-linux";
-        specialArgs = inputs;
-        modules = [
-          {
-            nixpkgs.overlays = (builtins.attrValues self.overlays) ++ [
-              inputs.nix-otel.overlays.default
-              inputs.nix-ld-rs.overlays.default
-              (final: prev: {
-                fzf = inputs.nixpkgs-small.legacyPackages.${system}.fzf;
-              })
-            ];
-          }
-          ./hosts/noah-nixos-desktop/configuration.nix
-          home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.noah = import ./home.nix;
-          }
-        ];
+  outputs = { self, nixpkgs, flake-utils, ... }@inputs:
+    let
+      forAllSystems = fn: nixpkgs.lib.genAttrs [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ] (system: fn (nixpkgs.legacyPackages.${system}));
+    in {
+      nixosConfigurations = {
+        noah-nixos-desktop = import ./hosts/noah-nixos-desktop { inherit inputs self; };
       };
 
       overlays = (import ./util.nix).mkOverlays self.packages;
-    } // flake-utils.lib.eachDefaultSystem (system: {
-      legacyPackages = import nixpkgs {
-        inherit system;
-        config.allowUnfree = true;
-        overlays = builtins.attrValues self.overlays;
-      };
-      packages = # does this override consumers' setting or will it error later? also apparently precludes x-compile
+      packages = forAllSystems (pkgs': 
         let
+          # does this override consumers' setting or will it error later? also apparently precludes x-compile
           pkgs = import nixpkgs {
-            inherit system;
+            system = pkgs'.system;
             config.allowUnfree = true;
           };
         in {
           monostroom = pkgs.callPackage ./pkgs/monostroom.nix { };
           code2000 = pkgs.callPackage ./pkgs/code2000.nix { };
-          fish = pkgs.callPackage ./pkgs/fish.nix { };
           polybar-zfs = pkgs.callPackage ./pkgs/polybar-zfs.nix { };
           psgrep = pkgs.callPackage ./pkgs/psgrep.nix { };
           splatmoji = pkgs.callPackage ./pkgs/splatmoji.nix { };
           # causes way too much to be rebuilt
           # polkit = pkgs.callPackage ./pkgs/polkit.nix { };
-        };
-      formatter = nixpkgs.legacyPackages.${system}.nixfmt;
-    });
+        });
+      formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+    };
 }
