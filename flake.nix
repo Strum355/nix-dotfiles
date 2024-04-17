@@ -11,6 +11,10 @@
     nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     flake-utils.url = "github:numtide/flake-utils";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
+    nixos-generators = {
+      url = "github:nix-community/nixos-generators";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -35,6 +39,8 @@
     in {
       nixosConfigurations = {
         noah-nixos-desktop = import ./hosts/noah-nixos-desktop { inherit inputs self; };
+
+        wd-dl2100 = import ./hosts/wd-dl2100 { inherit inputs self; };
       } // (import ./hosts/raspberrypi4 { inherit inputs self; });
 
       overlays = (import ./util.nix).mkOverlays self.packages;
@@ -51,9 +57,14 @@
           polybar-zfs = pkgs.callPackage ./pkgs/polybar-zfs.nix { };
           psgrep = pkgs.callPackage ./pkgs/psgrep.nix { };
           splatmoji = pkgs.callPackage ./pkgs/splatmoji.nix { };
+          wdnas-hwdaemon = pkgs.callPackage ./pkgs/wdnas-hwdaemon.nix { };
           # causes way too much to be rebuilt
           # polkit = pkgs.callPackage ./pkgs/polkit.nix { };
         });
       formatter = forAllSystems (pkgs: pkgs.nixfmt-rfc-style);
+    
+      nixosModules = {
+        wdnas-hwdaemon = import ./modules/wdnas-hwdaemon.nix;
+      };
     };
 }
