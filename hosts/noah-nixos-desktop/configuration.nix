@@ -1,11 +1,14 @@
-{ lib, pkgs, nixpkgs, ... }:
+{ pkgs, lib, config, ... }:
 let
   lockBackground = builtins.path {
     path = ./lock-background.jpg;
     name = "slick-lock-background";
   };
 in {
-  imports = [ ./hardware-configuration.nix ];
+  imports = [ 
+    ./hardware-configuration.nix 
+    ../common.nix
+  ];
 
   boot = {
     loader = {
@@ -27,7 +30,6 @@ in {
 
   networking = {
     firewall.enable = false;
-    nameservers = [ "1.1.1.1" "8.8.8.8" ];
     hostName = "noah-nixos-desktop";
     hostId = "8425e349";
     networkmanager = {
@@ -56,20 +58,7 @@ in {
       }];
     };
   };
-  services.resolved = {
-    enable = true;
-    # epic gaming 
-    # https://sourcegraph.com/github.com/NixOS/nixpkgs@a61c6b478d80952fad5be7fc499f0b9b681c9b58/-/blob/nixos/modules/system/boot/resolved.nix?L89-93
-    dnssec = "true";
-    extraConfig = ''
-      DNSOverTLS=yes
-      Cache=yes
-    '';
-  };
 
-  time.timeZone = "Europe/Dublin";
-
-  i18n.defaultLocale = "en_US.UTF-8";
   console = {
     earlySetup = true;
     packages = [ pkgs.terminus_font ];
@@ -198,16 +187,7 @@ in {
     users = [ "noah" ];
   };
 
-  users.mutableUsers = false;
-  users.users.noah = {
-    isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "docker" "audio" ];
-    shell = pkgs.fish;
-    home = "/home/noah";
-    createHome = true;
-    hashedPassword =
-      "$y$jFT$4BKFwYX3OJFl9W6Md0cw./$fS16Nf1gFV3PecFbe5LfzCulv4OoLJFKz8nEfXi.pz0";
-  };
+  users.users.noah.hashedPassword = "$y$jFT$4BKFwYX3OJFl9W6Md0cw./$fS16Nf1gFV3PecFbe5LfzCulv4OoLJFKz8nEfXi.pz0";
 
   environment.sessionVariables = with pkgs; {
     JAVA_HOME = "${jdk11}/lib/openjdk";
@@ -390,31 +370,13 @@ in {
   };
 
   nixpkgs.config.joypixels.acceptLicense = true;
-  nixpkgs.config.allowUnfree = true;
-  nixpkgs.overlays = [
-    (self: super: {
-      nix-direnv = super.nix-direnv.override { enableFlakes = true; };
-    })
+  nix.settings.trusted-substituters = [ "https://sourcegraph-noah.cachix.org" ];
+  nix.settings.trusted-public-keys = [
+    "sourcegraph-noah.cachix.org-1:rTTKnyuUmJuGt/UAXUpdOCOXDAfaO1AYy+/jSre3XgA="
   ];
-  nix = {
-    settings = {
-      experimental-features = [ "nix-command" "flakes" ];
-      auto-optimise-store = true;
-      keep-outputs = true;
-      trusted-substituters = [ "https://sourcegraph-noah.cachix.org" ];
-      trusted-public-keys = [
-        "sourcegraph-noah.cachix.org-1:rTTKnyuUmJuGt/UAXUpdOCOXDAfaO1AYy+/jSre3XgA="
-      ];
-    };
-    extraOptions = ''
-      extra-substituters = https://sourcegraph-noah.cachix.org
-    '';
-    # plugin-files = ${pkgs.nix-otel}/lib/libnix_otel_plugin.so
-    gc.automatic = true;
-    optimise.automatic = true;
-    registry = { nixpkgs.flake = nixpkgs; };
-    nixPath = [ "nixpkgs=${nixpkgs.outPath}" ];
-  };
+  nix.extraOptions = ''
+    extra-substituters = https://sourcegraph-noah.cachix.org
+  '';
 
   services.udev.extraRules = ''
     # Windows Recovery Environment

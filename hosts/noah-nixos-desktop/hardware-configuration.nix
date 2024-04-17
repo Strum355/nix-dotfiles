@@ -1,5 +1,4 @@
 { config, lib, modulesPath, ... }:
-
 {
   imports = [ (modulesPath + "/installer/scan/not-detected.nix") ];
 
@@ -11,6 +10,7 @@
     # https://wiki.gentoo.org/wiki/Iwlwifi/en#.22Microcode_SW_error_detected._Restarting_0x0.22_message_in_kernel_logs
     options iwlmvm power_scheme=1
   '';
+  boot.supportedFilesystems = [ "zfs" ];
 
   fileSystems."/" = {
     device = "rpool/nixos";
