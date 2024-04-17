@@ -315,6 +315,7 @@ in {
     dive
     pax-utils
     nix-inspect
+    starpls
   ];
 
   security = {

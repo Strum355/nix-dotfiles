@@ -11,6 +11,11 @@
     nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     flake-utils.url = "github:numtide/flake-utils";
     nixos-hardware.url = "github:NixOS/nixos-hardware";
+    rust-overlay = {
+      url = "github:oxalica/rust-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
     nixos-generators = {
       url = "github:nix-community/nixos-generators";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -58,6 +63,12 @@
           psgrep = pkgs.callPackage ./pkgs/psgrep.nix { };
           splatmoji = pkgs.callPackage ./pkgs/splatmoji.nix { };
           wdnas-hwdaemon = pkgs.callPackage ./pkgs/wdnas-hwdaemon.nix { };
+          starpls = pkgs.callPackage ./pkgs/starpls.nix {
+            rustPlatform = pkgs.makeRustPlatform {
+              cargo = inputs.rust-overlay.packages.${pkgs'.system}.rust-nightly_2023-12-06;
+              rustc = inputs.rust-overlay.packages.${pkgs'.system}.rust-nightly_2023-12-06;
+            };
+          };
           # causes way too much to be rebuilt
           # polkit = pkgs.callPackage ./pkgs/polkit.nix { };
         });
