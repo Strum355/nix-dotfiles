@@ -7,6 +7,40 @@ in {
 
   programs.home-manager.enable = true;
 
+  programs.fish = {
+    # enable = true;
+    functions = {
+      wdiff = "bash -c '${pkgs.wdiff}/bin/wdiff -n -w ${lib.escapeNixString "\$'\033[30;31m'"} -x ${lib.escapeNixString "\$'\033[0m'"} -y ${lib.escapeNixString "\$'\033[30;32m'"} -z ${lib.escapeNixString "\$'\033[0m'"} $argv[1..-1]";
+    };
+    shellInit = ''
+      set -x GOPATH $HOME/Go
+      set -x RUST_BACKTRACE 1
+      set -x KUBECONFIG $HOME/kubeconfig
+      set -x EDITOR nano
+    '';
+
+    loginShellInit = ''
+      set -U PATH $HOME/.bin $HOME/.local/bin $GOPATH/bin $HOME/.cargo/bin $PATH
+    '';
+
+    interactiveShellInit = ''
+      set fish_greeting ""
+      set -g theme_title_display_process yes
+      set -g theme_title_use_abbreviated_path no
+      set -g theme_show_exit_status yes
+      set -g theme_color_scheme terminal
+      set -g theme_display_k8s_context yes
+      set -g theme_display_date no
+    '';
+
+    shellAliases = {
+      g = "git";
+      k = "kubectl";
+      mk = "minikube";
+      devx = "pushd ~/Sourcegraph/dev-infra-scratch/ && code 2024/log.snb.md";
+    };
+  };
+
   programs.git = {
     enable = true;
     # pro league email scraping mitigation 
@@ -491,10 +525,10 @@ in {
         "Shift+Print" = "exec ${flameshot}/bin/flameshot gui -r | ${xclip}/bin/xclip -selection clipboard -t image/png";
         "${modifier}+Return" = "exec ${terminal}";
         "${modifier}+c" = "exec ${gnome.zenity}/bin/zenity --calendar";
-        
+
         "${modifier}+Shift+q" = "kill";
         "${modifier}+Shift+r" = "restart";
-        
+
         "${modifier}+d" = "exec ${menu} -show drun";
         "${alt}+Tab" = "exec ${menu} -show window";
 
