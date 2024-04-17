@@ -10,11 +10,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixpkgs-small.url = "github:NixOS/nixpkgs/nixos-unstable-small";
     flake-utils.url = "github:numtide/flake-utils";
-    nix-otel = {
-      url = "github:lf-/nix-otel";
-      # inputs.nixpkgs.follows = "nixpkgs";
-      inputs.flake-utils.follows = "flake-utils";
-    };
+    nixos-hardware.url = "github:NixOS/nixos-hardware";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -39,7 +35,7 @@
     in {
       nixosConfigurations = {
         noah-nixos-desktop = import ./hosts/noah-nixos-desktop { inherit inputs self; };
-      };
+      } // (import ./hosts/raspberrypi4 { inherit inputs self; });
 
       overlays = (import ./util.nix).mkOverlays self.packages;
       packages = forAllSystems (pkgs': 
