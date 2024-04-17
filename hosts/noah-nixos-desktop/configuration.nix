@@ -139,11 +139,10 @@ in {
 
     windowManager.i3 = {
       enable = true;
-      extraPackages = with pkgs; [ dmenu rofi polybar ];
-      #extraSessionCommands = ''
-      #  eval $(${pkgs.gnome3.gnome-keyring}/bin/gnome-keyring-daemon --daemonize --components=ssh,secrets)
-      #  export SSH_AUTH_SOCK
-      #'';
+      extraPackages = with pkgs; [ dmenu config.home-manager.users.noah.programs.rofi.finalPackage polybar ];
+      extraSessionCommands = ''
+        systemctl start --user polybar.service
+      '';
     };
 
     displayManager.defaultSession = "none+i3";
