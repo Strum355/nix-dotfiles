@@ -20,6 +20,7 @@ in {
 
     kernel.sysctl."net.ipv4.conf.all.arp_ignore" = 1;
     kernel.sysctl."net.ipv4.conf.all.arp_announce" = 1;
+    kernel.sysctl."net.ipv6.conf.wlp6s0.use_tempaddr" = 0;
     kernelParams = [ "zfs.zfs_arc_max=4294967296" ];
     swraid.enable = false;
   };
@@ -32,12 +33,12 @@ in {
     networkmanager = {
       enable = true;
       dns = "systemd-resolved";
+      logLevel = "INFO";
       extraConfig = ''
         [connection-wifi-wlp6s0]
         match-device=interface-name:wlp6s0
         ipv4.route-metric=10
-        # not working...
-        # ipv6.addr-gen-mode=eui64
+        ipv6.addr-gen-mode=eui64
 
         [connection-eth-eno1]
         match-device=interface-name:eno1
