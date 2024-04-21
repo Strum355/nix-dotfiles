@@ -188,7 +188,10 @@ in {
     users = [ "noah" ];
   };
 
-  users.users.noah.hashedPassword = "$y$jFT$4BKFwYX3OJFl9W6Md0cw./$fS16Nf1gFV3PecFbe5LfzCulv4OoLJFKz8nEfXi.pz0";
+  users.users.noah = {
+    shell = pkgs.fish;
+    hashedPassword = "$y$jFT$4BKFwYX3OJFl9W6Md0cw./$fS16Nf1gFV3PecFbe5LfzCulv4OoLJFKz8nEfXi.pz0";
+  };
 
   environment.sessionVariables = with pkgs; {
     JAVA_HOME = "${jdk11}/lib/openjdk";
@@ -330,6 +333,8 @@ in {
   };
 
   programs = {
+    fish.enable = true;
+    nix-index.enable = true;
     gnupg.agent = {
       enable = true;
       enableSSHSupport = true;

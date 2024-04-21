@@ -1,7 +1,7 @@
 { inputs, self }:
 inputs.nixpkgs.lib.nixosSystem rec {
   system = "x86_64-linux";
-  specialArgs = inputs;
+  specialArgs = { inherit (inputs) nixpkgs; };
   modules = [
     inputs.agenix.nixosModules.default
     {

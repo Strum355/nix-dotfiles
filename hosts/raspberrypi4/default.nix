@@ -1,20 +1,19 @@
 { inputs, self }:
-let 
-mkPi = hostname: inputs.nixpkgs.lib.nixosSystem {
-  system = "aarch64-linux";
-  specialArgs = {
-    inherit hostname self;
-    inherit (inputs) nixpkgs;
+let
+  mkPi = hostname: inputs.nixpkgs.lib.nixosSystem {
+    system = "aarch64-linux";
+    specialArgs = { inherit (inputs) nixpkgs; };
+    modules = [
+      inputs.nixos-hardware.nixosModules.raspberry-pi-4
+      { nixpkgs.overlays = [ self.overlays.psgrep ]; }
+      ./configuration.nix
+      { imports = [ ./${hostname}.nix ]; }
+      { networking.hostName = hostname; }
+    ];
   };
-  modules = [ 
-    { nixpkgs.overlays = [ self.overlays.psgrep ]; }
-    inputs.nixos-hardware.nixosModules.raspberry-pi-4
-    ./configuration.nix 
-  ];
-};
-in {
-  # TODO: give em some nice snazzy names
-  raspberrypi4-01 = mkPi "raspberrypi4-01";
-  raspberrypi4-02 = mkPi "raspberrypi4-02";
-  raspberrypi4-03 = mkPi "raspberrypi4-03";
+in
+{
+  raspberrypi4-milo = mkPi "raspberrypi4-milo";
+  raspberrypi4-watoto = mkPi "raspberrypi4-watoto";
+  raspberrypi4-miradan = mkPi "raspberrypi4-miradan";
 }

@@ -23,6 +23,14 @@
     supportedFilesystems = lib.mkForce [ "vfat" "ext4" "ntfs" ];
   };
 
+  hardware = {
+    raspberry-pi."4".apply-overlays-dtmerge.enable = true;
+    deviceTree = {
+      enable = true;
+      filter = "*rpi-4-*.dtb";
+    };
+  };
+
   fileSystems = {
     "/" = {
       # one day mSATA
