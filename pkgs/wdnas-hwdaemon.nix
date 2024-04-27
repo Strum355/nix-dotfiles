@@ -22,6 +22,10 @@ python3Packages.buildPythonApplication rec {
     # we can go lower than 20 :smugcat:
     substituteInPlace lib/wdhwlib/fancontroller.py \
       --replace-fail 'FAN_MIN = 20' 'FAN_MIN = 10'
+    # too aggressive at 40 causes excessive full throttle
+    substituteInPlace lib/wdhwlib/fancontroller.py \
+      --replace-fail 'Condition(FanController.LEVEL_WARM,     Condition.COMPARISON_GREATERTHAN,   40.0),' \
+      'Condition(FanController.LEVEL_WARM,     Condition.COMPARISON_GREATERTHAN,   50.0),'
   '';
 
   # needed to satisfy buildPythonApplication
