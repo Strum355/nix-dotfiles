@@ -37,16 +37,16 @@ in {
       enable = true;
       dns = "systemd-resolved";
       logLevel = "INFO";
-      extraConfig = ''
-        [connection-wifi-wlp6s0]
-        match-device=interface-name:wlp6s0
-        ipv4.route-metric=10
-        ipv6.addr-gen-mode=eui64
-
-        [connection-eth-eno1]
-        match-device=interface-name:eno1
-        ipv4.route-metric=100
-      '';
+      settings = {
+        connection-wifi-wlp6s0 = {
+          "match-device" = "interface-name:wlp6s0";
+          "ipv4.route-metric" = 10;
+        };
+        connection-eth-eno1 = {
+          "match-device" = "interface-name:eno1";
+          "ipv4.route-metric" = 100;
+        };
+      };
     };
     extraHosts = ''
       127.0.0.1 sourcegraph.test
