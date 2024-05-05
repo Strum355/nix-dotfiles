@@ -40,7 +40,7 @@ in {
       # hardcode for now, can always parameterize later :shrug:
       wdhwd = {
         socket_path = cfg.socket;
-        logging = ":W";
+        logging = ":I";
         lcd_intensity_normal = 100;
         lcd_intensity_dimmed = 60;
         lcd_dim_timeout = 60;

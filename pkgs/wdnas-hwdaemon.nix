@@ -36,12 +36,13 @@ python3Packages.buildPythonApplication rec {
   installPhase = ''
     install -Dm755 bin/wdhwd $out/bin/wdhwd
     install -Dm755 bin/wdhwc $out/bin/wdhwc
+    cp -r lib $out/lib
   '';
 
   postFixup = ''
     for bin in $out/bin/*; do
       substituteInPlace $bin \
-        --replace-fail 'PYTHONPATH="''${SCRIPT_PATH}/../lib"' "PYTHONPATH=${src}/lib:$PYTHONPATH"
+        --replace-fail 'PYTHONPATH="''${SCRIPT_PATH}/../lib"' "PYTHONPATH=$out/lib:$PYTHONPATH"
       wrapProgram $bin --prefix PATH : ${lib.makeBinPath [ systemd python3 hddtemp ]}
     done
   '';
