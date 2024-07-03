@@ -60,6 +60,7 @@ in {
       rbmaster = "pull --rebase origin master";
       rbumain = "pull --rebase upstream main";
       rbumaster = "pull --rebase upstream master";
+      co = "checkout";
     };
     extraConfig = {
       core = { editor = "${pkgs.nano}/bin/nano"; };
