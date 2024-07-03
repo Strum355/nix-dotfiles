@@ -135,7 +135,6 @@ in {
       '';
     };
 
-    displayManager.defaultSession = "none+i3";
     displayManager.lightdm = {
       enable = true;
       greeter.enable = true;
@@ -162,10 +161,9 @@ in {
   };
   services.displayManager.defaultSession = "none+i3";
   services.picom.enable = true;
-  hardware.opengl = {
+  hardware.graphics = {
     enable = true;
-    driSupport = true;
-    driSupport32Bit = true;
+    enable32Bit = true;
     extraPackages = with pkgs; [ 
       libvdpau
       vaapiVdpau
@@ -198,7 +196,7 @@ in {
     JAVA_8_HOME = "${jdk8}/lib/openjdk";
     JAVA_11_HOME = "${jdk11}/lib/openjdk";
     JAVA_17_HOME = "${jdk17}/lib/openjdk";
-    JAVA_19_HOME = "${jdk19}/lib/openjdk";
+    JAVA_21_HOME = "${jdk21}/lib/openjdk";
     _JAVA_OPTIONS = "-Dawt.useSystemAAFontSettings=lcd";
     RUST_SRC_PATH = "${pkgs.rust.packages.stable.rustPlatform.rustLibSrc}";
     DIRENV_WARN_TIMEOUT = "5m";
@@ -226,7 +224,7 @@ in {
     jdk8
     jdk11
     jdk17
-    jdk19
+    jdk21
     kotlin
     go
     gopls
@@ -357,8 +355,7 @@ in {
     enable = true;
     extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
     xdgOpenUsePortal = true;
-    # do I want kde here?
-    config."none+i3".default = [ "kde" "gtk" "*" ];
+    config."none+i3".default = [ "gtk" "*" ];
   };
 
   # services.passSecretService.enable = true;
