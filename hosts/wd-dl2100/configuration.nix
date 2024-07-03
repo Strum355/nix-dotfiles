@@ -73,7 +73,6 @@
     };
     interfaces = {
       bond0 = {
-        useDHCP = false;
         ipv4.addresses = [{
           address = "192.168.88.210";
           prefixLength = 24;
@@ -82,13 +81,11 @@
           prefixLength = 24;
         }];
       };
-      enp0s20f0.useDHCP = false;
-      enp0s20f1.useDHCP = false;
     };
   };
 
   nix = {
-    package = pkgs.nixVersions.unstable;
+    package = pkgs.nixVersions.latest;
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       auto-optimise-store = true;

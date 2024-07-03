@@ -177,6 +177,7 @@ in {
     enable = true;
     drivers = with pkgs; [ epson-escpr ];
   };
+  hardware.sane.enable = true;
 
   sound.enable = true;
   hardware.pulseaudio.enable = true;

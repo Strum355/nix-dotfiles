@@ -28,7 +28,7 @@
   users.mutableUsers = false;
   users.users.noah = {
     isNormalUser = true;
-    extraGroups = [ "wheel" "networkmanager" "docker" "audio" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" "audio" "scanner" "lp" "wireshark" ];
     home = "/home/noah";
     createHome = true;
     openssh.authorizedKeys.keys = [
@@ -42,7 +42,7 @@
 
   nixpkgs.config.allowUnfree = true;
   nix = {
-    package = pkgs.nixVersions.unstable;
+    package = pkgs.nixVersions.latest;
     settings = {
       experimental-features = [ "nix-command" "flakes" ];
       auto-optimise-store = true;
