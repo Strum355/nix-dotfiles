@@ -185,6 +185,10 @@ in {
   hardware.openrazer = {
     enable = true;
     users = [ "noah" ];
+    batteryNotifier = {
+      enable = true;
+      percentage = 10;
+    };
   };
 
   users.users.noah = {
