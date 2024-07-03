@@ -38,6 +38,40 @@
     };
   };
 
+  services.prometheus.exporters = {
+    node = {
+      enable = true;
+      openFirewall = true;
+      extraFlags = [ "--collector.vmstat.fields" "^(oom_kill|pgpg|pswp|pg.*fault|pgscan|pgsteal).*" ];
+      enabledCollectors = [
+        "systemd"
+        "ethtool"
+      ];
+      disabledCollectors = [
+        # apparently can be a performance issue
+        # https://github.com/prometheus/node_exporter/issues/2966#issuecomment-2010747211
+        "cpufreq" 
+        "arp"
+        "bcache"
+        "bonding"
+        "btrfs"
+        "dmi"
+        "edac"
+        "fibrechannel"
+        "infiniband"
+        "ipvs"
+        "mdadm"
+        "nfs"
+        "nfsd"
+        "nvme"
+        "selinux"
+        "tapestats"
+        "xfs"
+        "zfs"
+      ];
+    };
+  };
+
   networking = {
     useDHCP = false;
     firewall.enable = true;
