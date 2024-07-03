@@ -5,13 +5,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "starpls";
-  version = "0.1.12";
+  version = "0.1.14-unstable-2024-08-03";
 
   src = fetchFromGitHub {
     owner = "withered-magic";
     repo = "starpls";
-    rev = "v${version}";
-    sha256 = "sha256-cPJdESD290KTbhzrjLjYuJmdWI/IUnYZP2pyFJs21Go=";
+    # rev = "v${version}";
+    rev = "538d55bc3d209692118c4d6770b7f5861fb0f888";
+    sha256 = "sha256-om4lYGWcUavYwJxHNjQ1Oy6dANJOimvEEt9tlhRDS0A=";
   };
 
   RUSTC_BOOTSTRAP = 1;
