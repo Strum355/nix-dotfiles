@@ -1,5 +1,5 @@
-{ lib, hddtemp, systemd, python3, python3Packages, fetchFromGitHub }:
-python3Packages.buildPythonApplication rec {
+{ lib, hddtemp, systemd, python3, python3Packages, fetchFromGitHub, fetchpatch }:
+python3Packages.buildPythonApplication {
   pname = "wdnas-hwdaemon";
   version = "2023-03-15_9fc0596";
   format = "other";
@@ -11,6 +11,13 @@ python3Packages.buildPythonApplication rec {
     sha256 = "sha256-wk7a8PTmynv3i6Et1qiZo+EMZnyotU+JhNPvK48JI2Q=";
   };
 
+  # patches = [
+  #   (fetchpatch {
+  #     url = "https://github.com/michaelroland/wdnas-hwdaemon/compare/master...temperature-hysteresis.diff";
+  #     hash = "sha256-sJkSxexQ1gccOCqxKbpuTFDcvG/OVtAt1YPuQBtevto=";
+  #   })
+  # ];
+
   dependencies = with python3Packages; [
     pyserial
     smbus2
@@ -19,9 +26,8 @@ python3Packages.buildPythonApplication rec {
   # we're not moving anything besides $src/bin stuff to $out,
   # so we patch other stuff in the patch phase instead of fixupPhase.
   postPatch = ''
-    # we can go lower than 20 :smugcat:
     substituteInPlace lib/wdhwlib/fancontroller.py \
-      --replace-fail 'FAN_MIN = 20' 'FAN_MIN = 10'
+      --replace-fail 'FAN_MIN = 20' 'FAN_MIN = 30'
     # too aggressive at 40 causes excessive full throttle
     substituteInPlace lib/wdhwlib/fancontroller.py \
       --replace-fail 'Condition(FanController.LEVEL_WARM,     Condition.COMPARISON_GREATERTHAN,   40.0),' \

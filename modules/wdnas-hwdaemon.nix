@@ -44,7 +44,7 @@ in {
         lcd_intensity_normal = 100;
         lcd_intensity_dimmed = 60;
         lcd_dim_timeout = 60;
-        fan_speed_normal = 10;
+        fan_speed_normal = 30;
         fan_speed_increment = 10;
         fan_speed_decrement = 10;
         # for some reason, array-typed fields are parsed as JSON instead of the configparser-native format
